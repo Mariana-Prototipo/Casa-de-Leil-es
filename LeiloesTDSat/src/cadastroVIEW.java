@@ -19,7 +19,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
      */
     public cadastroVIEW() {
         initComponents();
-        limpar();
+       
     }
 
     /**
@@ -169,7 +169,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
               if(resposta == 1){
 
                JOptionPane.showMessageDialog(null,"Item incluido com sucesso");
-               limpar();
+               
            }else if (resposta ==1062){
                     JOptionPane.showMessageDialog(null,"Item já foi cadastrado");   
                 }else{
@@ -235,8 +235,5 @@ public class cadastroVIEW extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     // End of variables declaration//GEN-END:variables
 
-    private void limpar() {
-      cadastroNome.setText("");
-      cadastroValor.setText("");
-    }
+   
 }
