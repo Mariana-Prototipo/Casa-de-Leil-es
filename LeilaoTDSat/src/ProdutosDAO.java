@@ -44,7 +44,7 @@ public class ProdutosDAO {
             prep = conn.prepareStatement("INSERT INTO produtos VALUES(?,?,?,?)");
             prep.setInt(1, produto.getId());
             prep.setString(2,produto.getNome());
-            prep.setInt(3, produto.getValor());
+            prep.setString(3, produto.getValor());
             prep.setString(4,produto.getStatus());
             status = prep.executeUpdate();
             return status;
@@ -54,40 +54,40 @@ public class ProdutosDAO {
         }  
     }
     
-    public void vender (int id){
-                
-                String sql = "UPDATE status FROM produtos WHERE id = ?";
+    public int vender (int id){
+            int status;
                 try {
+                     ProdutosDTO p = new ProdutosDTO();
                     //esse trecho é igual ao método editar e inserir
-                    PreparedStatement stmt = this.conn.prepareStatement(sql);
-                    stmt.setInt(1, id);
+                    prep = conn.prepareStatement("UPDATE produtos set status WHERE id = ?");
+                    prep.setInt(1, id);
+                    prep.setString(2, p.getStatus());
                     
-                    //Executando a query
-                    stmt.execute();
-                    //tratando o erro, caso ele ocorra
-                } catch (Exception e) {
-                    System.out.println("Erro ao excluir produto: " + e.getMessage());
+                    status = prep.executeUpdate();
+                    return status;
+                    
+                } catch (SQLException ex) {
+                    System.out.println("Erro ao conectar: " + ex.getMessage());
+                     return ex.getErrorCode();
                 }
                 
             }
     
-   public List<ProdutosDTO> getProdutoPorId(int id) {
+   public List<ProdutosDTO> getProdutoPorId() {
                 String sql = "SELECT * FROM produtos WHERE id = ? "; 
-                
+                    ProdutosDTO p = new ProdutosDTO();
                 try {
                     PreparedStatement stmt = this.conn.prepareStatement(sql);
-                                
-                    stmt.setInt(1,id);
+                   
                     ResultSet rs = stmt.executeQuery();            
                     
                     List<ProdutosDTO> lista = new ArrayList<>();
                     
                      while (rs.next()) {
-                        ProdutosDTO p = new ProdutosDTO();
                                  
                         p.setId(rs.getInt("id"));
                         p.setNome(rs.getString("nome"));
-                        p.setValor(rs.getInt("valor"));
+                        p.setValor(rs.getString("valor"));
                         p.setStatus(rs.getString("status"));
                        
                         
