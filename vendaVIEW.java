@@ -1,3 +1,9 @@
+
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -14,6 +20,7 @@ public class vendaVIEW extends javax.swing.JFrame {
      */
     public vendaVIEW() {
         initComponents();
+        Preencher();
     }
 
     /**
@@ -64,30 +71,30 @@ public class vendaVIEW extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnVoltar)
+                .addGap(17, 17, 17))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(257, 257, 257)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
+                        .addGap(52, 52, 52)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(67, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnVoltar)
-                .addGap(17, 17, 17))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(11, 11, 11)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(24, 24, 24)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnVoltar)
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -138,4 +145,39 @@ public class vendaVIEW extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable listaVendas;
     // End of variables declaration//GEN-END:variables
+
+    private void Preencher() {
+        ProdutosDAO dao = new ProdutosDAO();
+        boolean status = dao.conectar();
+             String condicao = "Vendido";
+             
+            if(status == true){
+                List<ProdutosDTO> d = dao.getprodutoV(condicao);
+                if(d == null){
+                    JOptionPane.showMessageDialog(null,"Não foi possivel localizar a tabela.");
+                } else {
+                 List<ProdutosDTO> lista = dao.getprodutoV(condicao);
+            
+                DefaultTableModel tabeladados = (DefaultTableModel) listaVendas.getModel();
+                tabeladados.setNumRows(0);
+            
+                listaVendas.setRowSorter(new TableRowSorter(tabeladados));
+                      
+                for (ProdutosDTO c : lista) { 
+                    Object[] obj = new Object[] { 
+                        c.getId(),
+                        c.getNome(), 
+                        c.getStatus(),
+                        c.getValor()
+                                   
+                    };
+                    tabeladados.addRow(obj);
+                }
+                
+                }               
+                dao.desconectar();
+            }else{
+                JOptionPane.showMessageDialog(null,"Erro de conexão");
+            }          
+    }
 }
