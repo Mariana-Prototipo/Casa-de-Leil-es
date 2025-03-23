@@ -10,12 +10,12 @@
  * @author Adm
  */
 public class ProdutosDTO {
-    private Integer id;
+    private int id;
     private String nome;
     private Integer valor;
     private String status;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -23,7 +23,7 @@ public class ProdutosDTO {
         return nome;
     }
 
-    public Integer getValor() {
+    public int getValor() {
         return valor;
     }
 

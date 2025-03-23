@@ -19,6 +19,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
      */
     public cadastroVIEW() {
         initComponents();
+        limpar();
     }
 
     /**
@@ -157,8 +158,26 @@ public class cadastroVIEW extends javax.swing.JFrame {
         produto.setValor(Integer.parseInt(valor));
         produto.setStatus(status);
         
-        ProdutosDAO produtodao = new ProdutosDAO();
-        produtodao.cadastrarProduto(produto);
+        ProdutosDAO dao = new ProdutosDAO();
+        
+        stats = dao.conectar();
+            if(stats == false){
+                JOptionPane.showMessageDialog(null,"Erro de conexão");
+            }else{
+                resposta = dao.cadastrarProduto(produto);
+                
+              if(resposta == 1){
+
+               JOptionPane.showMessageDialog(null,"Item incluido com sucesso");
+               limpar();
+           }else if (resposta ==1062){
+                    JOptionPane.showMessageDialog(null,"Item já foi cadastrado");   
+                }else{
+                    JOptionPane.showMessageDialog(null,"Erro ao tentar inserir dados");
+                    
+           } 
+              dao.desconectar();
+            }
         
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
@@ -215,4 +234,9 @@ public class cadastroVIEW extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     // End of variables declaration//GEN-END:variables
+
+    private void limpar() {
+      cadastroNome.setText("");
+      cadastroValor.setText("");
+    }
 }
