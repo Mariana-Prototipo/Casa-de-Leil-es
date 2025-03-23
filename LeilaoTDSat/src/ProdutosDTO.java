@@ -12,7 +12,7 @@
 public class ProdutosDTO {
     private int id;
     private String nome;
-    private Integer valor;
+    private String valor;
     private String status;
 
     public int getId() {
@@ -23,7 +23,7 @@ public class ProdutosDTO {
         return nome;
     }
 
-    public int getValor() {
+    public String getValor() {
         return valor;
     }
 
@@ -39,7 +39,7 @@ public class ProdutosDTO {
         this.nome = nome;
     }
 
-    public void setValor(Integer valor) {
+    public void setValor(String valor) {
         this.valor = valor;
     }
 

@@ -148,12 +148,28 @@ public class listagemVIEW extends javax.swing.JFrame {
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         int id = Integer.parseInt(id_produto_venda.getText());
         //produtosdao.venderProduto(Integer.parseInt(id));
-        listarProdutos();
+        ProdutosDAO dao = new ProdutosDAO();
+        ProdutosDTO p = new ProdutosDTO();
+        boolean status = dao.conectar();
+        if(status == true){
+                
+                p.setStatus("Vendido");
+                dao.vender(id);
+                listarProdutos();
+               if (p == null) {
+                    JOptionPane.showMessageDialog(this, "Não foi possível alterar o item!");
+                } 
+                  dao.desconectar();
+               }else{
+                JOptionPane.showMessageDialog(null,"Erro de conexão");
+                }
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
         //vendasVIEW vendas = new vendasVIEW(); 
+        vendaVIEW v = new vendaVIEW();
         //vendas.setVisible(true);
+        v.setVisible(true);
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
@@ -209,39 +225,35 @@ public class listagemVIEW extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void listarProdutos(){
-        ProdutosDAO dao = new ProdutosDAO();
-            
-            boolean status = dao.conectar();
-               int id = Integer.parseInt(id_produto_venda.getText());
-            
+       ProdutosDAO dao = new ProdutosDAO();
+         boolean status = dao.conectar();
+          
                 if(status == true){
-                List<ProdutosDTO> j = dao.getProdutoPorId(id);
-                if(j == null){
+                List<ProdutosDTO> p = dao.getProdutoPorId();
+                if(p == null){
                     JOptionPane.showMessageDialog(null,"Não foi possivel localizar a tabela.");
                 }else{
-                     List<ProdutosDTO> listaprodutos = dao.getProdutoPorId(id);
-                     
+        try {
+            ProdutosDAO produtosdao = new ProdutosDAO();
             
-                DefaultTableModel tabela = (DefaultTableModel) listaProdutos.getModel();
-                tabela.setNumRows(0);
-                
-                listaProdutos.setRowSorter(new TableRowSorter(tabela));
-                      
-                for (ProdutosDTO c : listaprodutos) { 
-                    Object[] obj = new Object[] { 
-                        c.getId(),           
-                        c.getNome(), 
-                        c.getValor(),
-                        c.getStatus()
-                 
-                    };
-                    tabela.addRow(obj);
-                }
-                
-                }
-                dao.desconectar();
-            }else{
-                JOptionPane.showMessageDialog(null,"Erro de conexão");
+            DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
+            model.setNumRows(0);
+            
+            List<ProdutosDTO> listagem = produtosdao.getProdutoPorId();
+            
+            for(int i = 0; i < listagem.size(); i++){
+                model.addRow(new Object[]{
+                    listagem.get(i).getId(),
+                    listagem.get(i).getNome(),
+                    listagem.get(i).getValor(),
+                    listagem.get(i).getStatus()
+                });
             }
+        } catch (Exception e) {
+            
+        }
+    
+         }
+     }
     }
 }

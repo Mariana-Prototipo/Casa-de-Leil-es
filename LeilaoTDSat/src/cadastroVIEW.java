@@ -152,7 +152,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
         String status = "A Venda";
         
         produto.setNome(cadastroNome.getText());
-        produto.setValor(Integer.parseInt(cadastroValor.getText()));
+        produto.setValor(cadastroValor.getText());
         produto.setStatus(status);
         
         ProdutosDAO dao = new ProdutosDAO();
